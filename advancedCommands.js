@@ -13,13 +13,13 @@ module.exports = {
 
         //sanitizing data
         var replyData = {};
-        replyData.url = String(dataRes.posterImage.tiny) ? String(dataRes.posterImage.tiny) : "undefined";
-        replyData.title = String(dataRes.canonicalTitle) ? String(dataRes.canonicalTitle) : "undefined";
-        replyData.description = String(dataRes.synopsis) ? String(dataRes.synopsis) : "undefined";
-        replyData.rating = String(dataRes.averageRating) ? String(dataRes.averageRating) : "undefined";
-        replyData.age = String(dataRes.ageRatingGuide) ? String(dataRes.averageRating) : "undefined";
-        replyData.chapters = String(dataRes.chapterCount) ? String(dataRes.chapterCount) : "undefined";
-        replyData.status = String(dataRes.status) ? String(dataRes.status) : "undefined";
+        replyData.url = sanitize(dataRes.posterImage.tiny);
+        replyData.title = sanitize(dataRes.canonicalTitle);
+        replyData.description = sanitize(dataRes.synopsis);
+        replyData.rating = sanitize(dataRes.averageRating);
+        replyData.age = sanitize(dataRes.ageRatingGuide);
+        replyData.chapters = sanitize(dataRes.chapterCount);
+        replyData.status = sanitize(dataRes.status);
 
         var thumbImg = {url : replyData.url};
         var reply = {
@@ -56,15 +56,14 @@ module.exports = {
 
         //sanitizing data
         var replyData = {};
-        replyData.url = String(dataRes.posterImage.tiny) ? String(dataRes.posterImage.tiny) : "undefined";
-        replyData.title = String(dataRes.canonicalTitle) ? String(dataRes.canonicalTitle) : "undefined";
-        replyData.description = String(dataRes.synopsis) ? String(dataRes.synopsis) : "undefined";
-        replyData.rating = String(dataRes.averageRating) ? String(dataRes.averageRating) : "undefined";
-        replyData.age = String(dataRes.ageRatingGuide) ? String(dataRes.averageRating) : "undefined";
-        replyData.epiCount = String(dataRes.episodeCount) ? String(dataRes.episodeCount) : "undefined";
-        replyData.epiLength = String(dataRes.episodeLength) ? String(dataRes.episodeLength) : "undefined";
-        replyData.nsfw = String(dataRes.nsfw) ? String(dataRes.nsfw) : "undefined";
-        replyData.status = String(dataRes.status) ? String(dataRes.status) : "undefined";
+        replyData.url = sanitize(dataRes.posterImage.tiny)
+        replyData.title = sanitize(dataRes.canonicalTitle);
+        replyData.description = sanitize(dataRes.synopsis);
+        replyData.rating = sanitize(dataRes.averageRating);
+        replyData.age = sanitize(dataRes.ageRatingGuide);
+        replyData.epiCount = sanitize(dataRes.episodeCount);
+        replyData.epiLength = sanitize(dataRes.episodeLength);
+        replyData.status = sanitize(dataRes.status);
 
 
         var thumbImg = {url : replyData.url};
@@ -74,57 +73,70 @@ module.exports = {
             color: 0x00ff00,
             thumbnail: thumbImg,
             fields: [{
-                    name: 'Avg rating',
-                    value: replyData.rating,
-                    inline: true
+                name: 'Avg rating',
+                value: replyData.rating,
+                inline: true
             },
             {
-                    name: 'Age rating',
-                    value: replyData.age,
-                    inline: true
+                name: 'Age rating',
+                value: replyData.age,
+                inline: true
             },
             {
-                    name: 'NSFW',
-                    value: replyData.nsfw,
-                    inline: true
+                name: 'Episode count/length',
+                value: replyData.epiCount + "/" + replyData.epiLength + " min",
+                inline: true
             },
             {
-                    name: 'Episode count/length',
-                    value: replyData.epiCount + "/" + replyData.epiLength + " min",
-                    inline: true
-            },
-            {
-                    name: 'Status',
-                    value: replyData.status,
-                    inline: true
+                name: 'Status',
+                value: replyData.status,
+                inline: true
             }]
         };
         return reply;
     },
+    /**
+     * TOFIX currently put on hold since strings are html + needs to shortened in some way
+    character: async function(param){
+        var res = await kitsu.get('characters?filter[name]='+param);
+        var dataRes = res.data[0];
+        var replyData = {};
+        replyData.url = sanitize(dataRes.image.original)
+        replyData.name = sanitize(dataRes.name);
+        replyData.description = sanitize(dataRes.description);
+        
+        var cleandesc = replyData.description.replace(/<\/?[^>]+(>|$)/g,'');
+        console.log(cleandesc);
+        var thumbImg = {url : replyData.url};
+        var reply = {
+            title: replyData.name,
+            description: cleandesc.substring(0,cleandesc.length/2),
+            color: 0x00ff00,
+            thumbnail: thumbImg,
+        };
+        return reply;
+    },*/
     animelist: async function(username){
         //https://myanimelist.net/malappinfo.php?u=NeneInTheTARDIS&status=all&type=all
         
         xhr.open("GET","https://myanimelist.net/malappinfo.php?u=" + username + "&status=all&type=all",false);
         xhr.send();
-
-        console.log(xhr.status);
     
         var parsed;
         xmlParser(xhr.responseText,function(err,result){
             parsed = result;
         });
        
-
         var parsedData = parsed.myanimelist.myinfo[0];
         var replyData = {}
-        replyData.username = String(parsedData.user_name[0]) ? String(parsedData.user_name[0]) : "undefined";
-        replyData.url = String("https://myanimelist.net/profile/" + replyData.username) ? String("https://myanimelist.net/profile/" + replyData.username) : String("https://google.com");
-        replyData.watching = String(parsedData.user_watching[0]) ? String(parsedData.user_watching[0]) : "undefined";
-        replyData.completed = String(parsedData.user_completed[0]) ? String(parsedData.user_completed[0]) : "undefined";
-        replyData.onHold = String(parsedData.user_onhold[0]) ? String(parsedData.user_onhold[0]) : "undefined";
-        replyData.dropped = String(parsedData.user_dropped[0]) ? String(parsedData.user_dropped[0]) : "undefined";
-        replyData.plantowatch = String(parsedData.user_plantowatch[0]) ? String(parsedData.user_plantowatch[0]) : "undefined";
-        replyData.daysWatching = String(parsedData.user_days_spent_watching[0]) ? String(parsedData.user_days_spent_watching[0]) : "undefined";
+        replyData.username = sanitize(parsedData.user_name[0]);
+        replyData.url = sanitize("https://myanimelist.net/profile/" + replyData.username);
+        replyData.watching = sanitize(parsedData.user_watching[0]);
+        replyData.completed = sanitize(parsedData.user_completed[0]);
+        replyData.onHold = sanitize(parsedData.user_onhold[0]);
+        replyData.dropped = sanitize(parsedData.user_dropped[0]);
+        replyData.plantowatch = sanitize(parsedData.user_plantowatch[0]);
+        replyData.daysWatching = sanitize(parsedData.user_days_spent_watching[0]);
 
         var reply = {
             title: replyData.username + "'s anime list info",
@@ -164,3 +176,7 @@ module.exports = {
         return reply;
     }
 };
+
+function sanitize(value){
+        return String(value) || value === null ? String(value) : "undefined";
+}

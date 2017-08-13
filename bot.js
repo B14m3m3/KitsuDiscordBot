@@ -15,8 +15,13 @@ bot.on('ready', function() {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
 });
 
+bot.on('disconnect', function(errMsg, code){
+    console.log('Error Code: ' + code + '. Message: '+ errMsg);
+});
+
+
 bot.on('message', function(user, userID, channelID, message, event) {
-    message.toLowerCase;
+    message.toLowerCase();
     if(message.startsWith(initializer)){
         var command = message.split(" ");
         var path = command[0].split("."); 
@@ -28,7 +33,6 @@ bot.on('message', function(user, userID, channelID, message, event) {
         var replyMsg;
         try{
             if (path.length >= 1) {
-                console.log(path[0] + " test");
                 var replyPromise = advancedCommands[path[0]](param);
                 replyPromise.then(
                     success => reply(channelID,success),
