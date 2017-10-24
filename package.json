@@ -1,7 +1,7 @@
 {
   "name": "Animubot",
   "version": "1.0.0",
-  "description": "",
+  "description": "discord bot for accessing the kitsu api" ,
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
@@ -11,8 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "discord.io": "^2.5.1",
-    "kitsu": "^2.0.3",
-    "xml2js": "^0.4.17",
-    "xmlhttprequest": "^1.8.0"
+    "kitsu": "^2.0.3"
   }
 }

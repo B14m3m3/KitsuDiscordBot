@@ -25,7 +25,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
     if(message.startsWith(initializer)){
         var command = message.split(" ");
         var path = command[0].split("."); 
-        //remove !animu
+        //remove initializer
         command.shift();
         path.shift();
 
@@ -35,24 +35,22 @@ bot.on('message', function(user, userID, channelID, message, event) {
             if (path.length >= 1) {
                 var replyPromise = advancedCommands[path[0]](param);
                 replyPromise.then(
-                    success => reply(channelID,success),
-                    failure => reply(channelID, error(path,command))
-                );       
-            }else{
+                    success => reply(channelID, success),
+                    failure => reply(error("error", message))
+                );
+            } else {
                 replyMsg = simpleCommands[command[0]]();
                 reply(channelID, replyMsg);
             }
-        }catch(e){
-            replyMsg = error(path,command);
+        }catch(e) {
+            replyMsg = error(e, message);
             reply(channelID, replyMsg);
         }
-        
     }
 });
 
-function error(path, parameters){
-    //TODO formatting of paramters and path
-    var comment = "Could not find a action for " + path + " with the parameters " +  parameters + ". \nUse '!animu help' for overview of command";
+function error(e, request){
+    var comment = "Could not find an action for the command `" + request + "`.\nUse `" + initializer + " help` for overview of commands";
     var reply = {
         title: "Error",
         description: comment,
