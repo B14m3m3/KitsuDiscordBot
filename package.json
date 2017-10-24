@@ -1,7 +1,7 @@
 {
   "name": "Animubot",
   "version": "1.0.0",
-  "description": "discord bot for accessing the kitsu api" ,
+  "description": "discord bot for accessing the kitsu api",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
