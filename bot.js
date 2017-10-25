@@ -2,7 +2,7 @@ var Discord = require('discord.io');
 var simpleCommands = require("./simpleCommands.js");
 var advancedCommands = require("./advancedCommands.js");
 var tokens = require('./tokens.js');
-var initializer = '!kitsu';
+var globals = require('./globals.js');
 
 var bot = new Discord.Client({
     token: tokens.botToken,
@@ -10,7 +10,6 @@ var bot = new Discord.Client({
 });
 
 
- 
 bot.on('ready', function() {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
 });
@@ -22,7 +21,7 @@ bot.on('disconnect', function(errMsg, code){
 
 bot.on('message', function(user, userID, channelID, message, event) {
     message.toLowerCase();
-    if(message.startsWith(initializer)){
+    if(message.startsWith(globals.initializer)){
         var command = message.split(" ");
         var path = command[0].split("."); 
         //remove initializer
@@ -50,7 +49,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 });
 
 function error(e, request){
-    var comment = "Could not find an action for the command `" + request + "`.\nUse `" + initializer + " help` for overview of commands";
+    var comment = "Could not find an action for the command `" + request + "`.\nUse `" + globals.initializer + " help` for overview of commands";
     var reply = {
         title: "Error",
         description: comment,
