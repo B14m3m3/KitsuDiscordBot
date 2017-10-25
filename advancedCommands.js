@@ -1,10 +1,10 @@
 var Kitsu = require('kitsu');
 var kitsu = new Kitsu();
+var htmlToText = require('html-to-text');
 
 const suggestLimit = 5;
 module.exports = {
     manga: async (param) => {
-        //putting the limit the same way the kitsu framework does it does not seem to work. - TODO revisit
         let res = await kitsu.get('manga?filter[text]=' + param + '&page[limit]=' + suggestLimit);
         let dataRes = res.data[0];
 
@@ -107,26 +107,27 @@ module.exports = {
         return reply;
     },
     /**
-     * TODO currently put on hold since strings are html + needs to shortened in some way
+     * TODO currently put on hold since strings are html and needs to shortened to fit the 2000 discord limit in some way
     character: async function(param){
-        var res = await kitsu.get('characters?filter[name]='+param);
+        console.log("character");
+        var res = await kitsu.get('characters?filter[name]=' + param + '&page[limit]=' + suggestLimit);
         var dataRes = res.data[0];
         var replyData = {};
         replyData.url = sanitize(dataRes.image.original)
         replyData.name = sanitize(dataRes.name);
-        replyData.description = sanitize(dataRes.description);
-
-        var cleandesc = replyData.description.replace(/<\/?[^>]+(>|$)/g,'');
-        console.log(cleandesc);
+        console.log(dataRes.description);
+        replyData.description = htmlToText.fromString(sanitize(dataRes.description));
+        console.log(replyData.description + " " + replyData.description.length);
         var thumbImg = {url : replyData.url};
         var reply = {
             title: replyData.name,
-            description: cleandesc.substring(0,cleandesc.length/2),
+            description: replyData.description,
             color: 0x00ff00,
             thumbnail: thumbImg,
         };
         return reply;
-    },*/
+    }
+    */
 };
 
 

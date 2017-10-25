@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.io": "^2.5.1",
+    "html-to-text": "^3.3.0",
     "kitsu": "^2.0.3"
   }
 }
