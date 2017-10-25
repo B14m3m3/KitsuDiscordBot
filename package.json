@@ -2,6 +2,10 @@
   "name": "Animubot",
   "version": "1.0.0",
   "description": "discord bot for accessing the kitsu api",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/B14m3m3/KitsuDiscordBot"
+  },
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",

@@ -2,7 +2,7 @@ var Discord = require('discord.io');
 var simpleCommands = require("./simpleCommands.js");
 var advancedCommands = require("./advancedCommands.js");
 var tokens = require('./tokens.js');
-var initializer = '!animu';
+var initializer = '!kitsu';
 
 var bot = new Discord.Client({
     token: tokens.botToken,
