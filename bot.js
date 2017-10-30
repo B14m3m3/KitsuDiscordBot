@@ -23,7 +23,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
     message.toLowerCase();
     if(message.startsWith(globals.initializer)){
         var command = message.split(" ");
-        var path = command[0].split("."); 
+        var path = command[0].split(".");
         //remove initializer
         command.shift();
         path.shift();
@@ -35,21 +35,30 @@ bot.on('message', function(user, userID, channelID, message, event) {
                 var replyPromise = advancedCommands[path[0]](param);
                 replyPromise.then(
                     success => reply(channelID, success),
-                    failure => reply(error("error", message))
+                    failure => reply(channelID, requestError(param))
                 );
             } else {
                 replyMsg = simpleCommands[command[0]]();
                 reply(channelID, replyMsg);
             }
         }catch(e) {
-            replyMsg = error(e, message);
+            replyMsg = pathError(e, message);
             reply(channelID, replyMsg);
         }
     }
 });
 
-function error(e, request){
+function pathError(e, request){
     var comment = "Could not find an action for the command `" + request + "`.\nUse `" + globals.initializer + " help` for overview of commands";
+    return error(comment);
+}
+
+function requestError(param){
+    var comment = "Could not find any result for `" + param + "`.\nThis may also server error";
+    return error(comment);
+}
+
+function error(comment){
     var reply = {
         title: "Error",
         description: comment,
